@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Demo</title>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+
+	</head>
+<body>
+<script>
+    var myApp = angular.module("myApp", []);
+    myApp.controller("HttpDeleteController", function ($scope, $http) {
+
+        $scope.DeleteData = function () {
+
+            var data = $.param({
+                firstName: $scope.firstName,
+                lastName: $scope.lastName,
+                age: $scope.age
+            });
+
+            $http.delete('/api/Default?' + data)
+            .success(function (data, status, headers) {
+                $scope.ServerResponse = data;
+            })
+            .error(function (data, status, header, config) {
+                $scope.ServerResponse = "Data: " + data +
+                    "\n\n\n\nstatus: " + status +
+                    "\n\n\n\nheaders: " + header +
+                    "\n\n\n\nconfig: " + config;
+            });
+        };
+    });
+</script>
+<div ng-app="myApp" ng-controller="HttpDeleteController">
+    <h2>AngularJS Delete request </h2>
+    <form ng-submit="DeleteData()">
+        <p>First Name: <input type="text" name="firstName" ng-model="firstName" required /></p>
+        <p>Last Name: <input type="text" name="lastName" ng-model="lastName" required /></p>
+        <p>Age : <input type="number" name="age" ng-model="age" required /></p>
+        <input type="submit" value="Submit" />
+        <hr />
+        {{ ServerResponse }}
+    </form>
+</div>
+</body>
+</html>
